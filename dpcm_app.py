@@ -26,7 +26,7 @@ st.sidebar.markdown("<div style='font-size:17px; margin: 0; padding: 0;'>🔁 <b
 prediction_order = st.sidebar.number_input("", min_value=1, max_value=10, value=1)
 
 # Explanations
-st.sidebar.markdown("<div style='font-size:17px; margin: 0; padding: 0;'>ℹ️ <b>What These Parameters Mean:</b></div>", unsafe_allow_html=True)
+st.sidebar.markdown("<div style='font-size:17px; margin: 0; padding: 0;'>ℹ️ <b>Parameter Info:</b></div>", unsafe_allow_html=True)
 st.sidebar.markdown("""
 - **Quantizer Value (bits)**  
   Defines how many bits are used to represent the prediction error of each sample.
