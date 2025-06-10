@@ -1,23 +1,36 @@
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy.io.wavfile as wav
 from io import BytesIO
 import soundfile as sf
 
-st.set_page_config(layout="wide", page_title="DPCM App")
+st.set_page_config(layout="wide", page_title="DPCM App", page_icon="🎧")
 
-st.title("Differential Pulse-Code Modulation (DPCM)")
+# Title with custom color
+st.markdown(
+    "<h1 style='text-align: center; color: #4B8BBE;'>Differential Pulse-Code Modulation (DPCM)</h1>",
+    unsafe_allow_html=True
+)
 
 # Upload audio file
+st.markdown("### 🎵 Upload Your Audio File")
 uploaded_file = st.file_uploader("Upload the Audio File (.wav)", type=["wav"])
 
-# Sidebar inputs
-st.sidebar.header("DPCM Parameters")
-quant_value = st.sidebar.number_input("Enter the Quantizer Value (bits)", min_value=1, max_value=16, value=2)
-prediction_order = st.sidebar.number_input("Enter the Prediction Order", min_value=1, max_value=10, value=1)
+# Sidebar with inputs and explanation
+st.sidebar.markdown("## ⚙️ DPCM Parameters")
+quant_value = st.sidebar.number_input("Quantizer Value (bits)", min_value=1, max_value=16, value=2)
+prediction_order = st.sidebar.number_input("Prediction Order", min_value=1, max_value=10, value=1)
 
-# Functions
+# Explanations
+st.sidebar.markdown("## ℹ️ What These Parameters Mean:")
+st.sidebar.markdown("""
+- **Quantizer Value (bits)**: Determines how many bits are used to represent each sample error. More bits = better quality, less compression.
+- **Prediction Order**: Number of previous samples used to predict the current sample.
+""")
+
+st.markdown("---")
+
+# DPCM functions
 def dpcm_encode(y, order):
     len_y = len(y)
     prediction = np.zeros(len_y)
@@ -45,10 +58,9 @@ def dpcm_decode(quantized_error, order, prediction):
 
 # Main logic
 if uploaded_file is not None:
-    # Read audio
     audio_bytes = BytesIO(uploaded_file.read())
     y, fs = sf.read(audio_bytes)
-    y = y[:, 0] if y.ndim > 1 else y  # Convert stereo to mono
+    y = y[:, 0] if y.ndim > 1 else y  # Convert stereo to mono if needed
 
     len_y = len(y)
     error, prediction = dpcm_encode(y, prediction_order)
@@ -62,43 +74,64 @@ if uploaded_file is not None:
     mos = 1 + 0.035 * snr + snr * (snr - 60) * (100 - snr) * 7e-6
     mos = np.clip(mos, 1, 5)
 
+    # Metrics display
+    st.markdown("### 📊 Performance Metrics")
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("Mean Square Error", f"{mse:.8f}")
     col2.metric("Compression Ratio", f"{compression_ratio:.2f}")
     col3.metric("SNR (dB)", f"{snr:.2f}")
     col4.metric("MOS (1-5)", f"{mos:.2f}")
 
-    # Plots
-    st.subheader("Signal Plots")
-    fig, axs = plt.subplots(2, 2, figsize=(14, 8))
+    with st.expander("ℹ️ Definitions of Metrics", expanded=False):
+        st.markdown("""
+        - **Mean Square Error (MSE)**: Measures the average squared difference between the original and reconstructed signals. Lower is better.
+        - **Compression Ratio (CR)**: Ratio of original bit size to compressed bit size. Higher = more compression.
+        - **Signal-to-Noise Ratio (SNR)**: Ratio of signal power to noise power in dB. Higher = better quality.
+        - **MOS (Mean Opinion Score)**: Predicts perceived audio quality from 1 (bad) to 5 (excellent).
+        """)
 
-    axs[0, 0].plot(y)
+    # Plots
+    st.markdown("### 📈 Signal Plots")
+    fig, axs = plt.subplots(2, 2, figsize=(14, 8))
+    fig.subplots_adjust(hspace=0.4)
+
+    axs[0, 0].plot(y, color='#1f77b4')
     axs[0, 0].set_title("Original Signal")
 
-    axs[0, 1].plot(quantized_error)
+    axs[0, 1].plot(quantized_error, color='#ff7f0e')
     axs[0, 1].set_title("Encoder Output (Quantized Error)")
 
-    axs[1, 0].semilogy(np.abs(np.fft.fft(y)))
+    axs[1, 0].semilogy(np.abs(np.fft.fft(y)), color='#2ca02c')
     axs[1, 0].set_title("Spectrum of the Signal")
 
-    axs[1, 1].plot(reconstructed_signal)
+    axs[1, 1].plot(reconstructed_signal, color='#d62728')
     axs[1, 1].set_title("Decoder Output (Reconstructed Signal)")
 
     st.pyplot(fig)
 
-    # Audio playback section with buttons
-    st.subheader("Audio Playback")
-    
+    # Audio playback section
+    st.markdown("### 🔊 Audio Playback")
     col1, col2 = st.columns(2)
-    
+
+    if 'show_original' not in st.session_state:
+        st.session_state.show_original = False
+    if 'show_decoded' not in st.session_state:
+        st.session_state.show_decoded = False
+
     with col1:
         if st.button("▶️ Play Original Audio"):
-            original_audio_buffer = BytesIO()
-            sf.write(original_audio_buffer, y, fs, format='WAV')
-            st.audio(original_audio_buffer.getvalue(), format='audio/wav')
-    
+            st.session_state.show_original = True
+
     with col2:
         if st.button("▶️ Play Decoded Audio"):
-            decoded_audio_buffer = BytesIO()
-            sf.write(decoded_audio_buffer, reconstructed_signal, fs, format='WAV')
-            st.audio(decoded_audio_buffer.getvalue(), format='audio/wav')
+            st.session_state.show_decoded = True
+
+    if st.session_state.show_original:
+        original_audio_buffer = BytesIO()
+        sf.write(original_audio_buffer, y, fs, format='WAV')
+        st.audio(original_audio_buffer.getvalue(), format='audio/wav')
+
+    if st.session_state.show_decoded:
+        decoded_audio_buffer = BytesIO()
+        sf.write(decoded_audio_buffer, reconstructed_signal, fs, format='WAV')
+        st.audio(decoded_audio_buffer.getvalue(), format='audio/wav')
