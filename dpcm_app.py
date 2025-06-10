@@ -17,9 +17,13 @@ st.markdown("### 🎵 Upload Your Audio File")
 uploaded_file = st.file_uploader("Upload the Audio File (.wav)", type=["wav"])
 
 # Sidebar with inputs and explanation
-st.sidebar.markdown("## ⚙️ DPCM Parameters")
-quant_value = st.sidebar.number_input("Quantizer Value (bits)", min_value=1, max_value=16, value=2)
-prediction_order = st.sidebar.number_input("Prediction Order", min_value=1, max_value=10, value=1)
+st.sidebar.markdown("<h2 style='font-size: 22px; color: #4B8BBE;'>⚙️ DPCM Parameters</h2>", unsafe_allow_html=True)
+
+st.sidebar.markdown("### 🔢 <span style='font-size:18px'>**Quantizer Value (bits)**</span>", unsafe_allow_html=True)
+quant_value = st.sidebar.number_input("", min_value=1, max_value=16, value=2)
+
+st.sidebar.markdown("### 🔁 <span style='font-size:18px'>**Prediction Order**</span>", unsafe_allow_html=True)
+prediction_order = st.sidebar.number_input("", min_value=1, max_value=10, value=1)
 
 # Explanations
 st.sidebar.markdown("## ℹ️ What These Parameters Mean:")
@@ -41,8 +45,6 @@ st.sidebar.markdown("""
   - Example:
     - Order 1: Predicts current sample from 1 previous sample.
     - Order 2: Uses 2 prior samples for more refined prediction.
-  
-These parameters affect how efficiently the audio is compressed and how faithfully it can be reconstructed.
 """)
 
 st.markdown("---")
