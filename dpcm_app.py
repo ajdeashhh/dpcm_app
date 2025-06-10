@@ -19,10 +19,10 @@ uploaded_file = st.file_uploader("Upload the Audio File (.wav)", type=["wav"])
 # Sidebar with inputs and explanation
 st.sidebar.markdown("<h2 style='font-size: 22px; color: #4B8BBE;'>⚙️ DPCM Parameters</h2>", unsafe_allow_html=True)
 
-st.sidebar.markdown("### 🔢 <span style='font-size:18px'>**Quantizer Value (bits)**</span>", unsafe_allow_html=True)
+st.sidebar.markdown("### 🔢 <span style='font-size:15px'>**Quantizer Value (bits)**</span>", unsafe_allow_html=True)
 quant_value = st.sidebar.number_input("", min_value=1, max_value=16, value=2)
 
-st.sidebar.markdown("### 🔁 <span style='font-size:18px'>**Prediction Order**</span>", unsafe_allow_html=True)
+st.sidebar.markdown("### 🔁 <span style='font-size:15px'>**Prediction Order**</span>", unsafe_allow_html=True)
 prediction_order = st.sidebar.number_input("", min_value=1, max_value=10, value=1)
 
 # Explanations
