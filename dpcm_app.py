@@ -7,7 +7,7 @@ import soundfile as sf
 
 st.set_page_config(layout="wide", page_title="DPCM App")
 
-st.title("D P C M")
+st.title("Differential Pulse-Code Modulation (DPCM)")
 
 # Upload audio file
 uploaded_file = st.file_uploader("Upload the Audio File (.wav)", type=["wav"])
