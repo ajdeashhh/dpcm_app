@@ -26,28 +26,28 @@ st.sidebar.markdown("<div style='font-size:17px; margin: 0; padding: 0;'>🔁 <b
 prediction_order = st.sidebar.number_input("", min_value=1, max_value=10, value=1)
 
 # Explanations
-st.sidebar.markdown("<div style='font-size:17px; margin: 0; padding: 0;'>ℹ️ <b>Parameter Info:</b></div>", unsafe_allow_html=True)
-st.sidebar.markdown("""
-- **Quantizer Value (bits)**  
-  Defines how many bits are used to represent the prediction error of each sample.
-  
-  - More bits = 🔊 **Better audio quality**, 🐢 **less compression**
-  - Fewer bits = 📉 **Lower quality**, ⚡ **more compression**
-  - Example:
-    - 1 bit = 2 levels (very rough, mostly unintelligible)
-    - 2 bits = 4 levels (basic intelligibility, compact size)
-    - 8 bits = 256 levels (much higher quality)
+with st.sidebar.expander("ℹ️ Parameter Info", expanded=False):
+    st.markdown("<div style='font-size:17px; margin: 0; padding: 0;'><b>Quantizer Value (bits)</b></div>", unsafe_allow_html=True)
+    st.markdown("""
+    Defines how many bits are used to represent the prediction error of each sample.
 
-- **Prediction Order**  
-  The number of past samples used to estimate the current sample.
-  
-  - Higher order can improve prediction accuracy but may increase computation.
-  - Example:
-    - Order 1: Predicts current sample from 1 previous sample.
-    - Order 2: Uses 2 prior samples for more refined prediction.
-""")
+    - More bits = 🔊 **Better audio quality**, 🐢 **less compression**
+    - Fewer bits = 📉 **Lower quality**, ⚡ **more compression**
+    - Example:
+        - 1 bit = 2 levels (very rough, mostly unintelligible)
+        - 2 bits = 4 levels (basic intelligibility, compact size)
+        - 8 bits = 256 levels (much higher quality)
+    """)
+    
+    st.markdown("<div style='font-size:17px; margin: 0; padding: 0;'><b>Prediction Order</b></div>", unsafe_allow_html=True)
+    st.markdown("""
+    The number of past samples used to estimate the current sample.
 
-st.markdown("---")
+    - Higher order can improve prediction accuracy but may increase computation.
+    - Example:
+        - Order 1: Predicts current sample from 1 previous sample.
+        - Order 2: Uses 2 prior samples for more refined prediction.
+    """)
 
 # DPCM functions
 def dpcm_encode(y, order):
