@@ -111,16 +111,17 @@ if uploaded_file is not None:
 
     # Audio playback section
     st.markdown("### 🔊 Audio Playback")
+    
     col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("▶️ Play Original Audio"):
-            original_audio_buffer = BytesIO()
-            sf.write(original_audio_buffer, y, fs, format='WAV')
-            st.audio(original_audio_buffer.getvalue(), format='audio/wav')
+        st.markdown("**Original Audio**")
+        original_audio_buffer = BytesIO()
+        sf.write(original_audio_buffer, y, fs, format='WAV')
+        st.audio(original_audio_buffer.getvalue(), format='audio/wav')
     
     with col2:
-        if st.button("▶️ Play Decoded Audio"):
-            decoded_audio_buffer = BytesIO()
-            sf.write(decoded_audio_buffer, reconstructed_signal, fs, format='WAV')
-            st.audio(decoded_audio_buffer.getvalue(), format='audio/wav')
+        st.markdown("**Decoded Audio**")
+        decoded_audio_buffer = BytesIO()
+        sf.write(decoded_audio_buffer, reconstructed_signal, fs, format='WAV')
+        st.audio(decoded_audio_buffer.getvalue(), format='audio/wav')
