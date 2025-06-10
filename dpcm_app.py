@@ -8,7 +8,7 @@ st.set_page_config(layout="wide", page_title="DPCM App", page_icon="🎧")
 
 # Title with custom color
 st.markdown(
-    "<h1 style='text-align: center; color: #00000;'>Differential Pulse-Code Modulation (DPCM)</h1>",
+    "<h1 style='text-align: center; color: #000000;'>Differential Pulse-Code Modulation (DPCM)</h1>",
     unsafe_allow_html=True
 )
 
