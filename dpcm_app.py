@@ -88,5 +88,13 @@ if uploaded_file is not None:
 
     # Audio playback
     st.subheader("Audio Playback")
-    st.audio(sf.write(BytesIO(), y, fs, format='WAV').getvalue(), format='audio/wav', start_time=0, caption="Original Audio")
-    st.audio(sf.write(BytesIO(), reconstructed_signal, fs, format='WAV').getvalue(), format='audio/wav', start_time=0, caption="Decoded Audio")
+    
+    # Original audio
+    original_audio_buffer = BytesIO()
+    sf.write(original_audio_buffer, y, fs, format='WAV')
+    st.audio(original_audio_buffer.getvalue(), format='audio/wav', start_time=0)
+    
+    # Decoded audio
+    decoded_audio_buffer = BytesIO()
+    sf.write(decoded_audio_buffer, reconstructed_signal, fs, format='WAV')
+    st.audio(decoded_audio_buffer.getvalue(), format='audio/wav', start_time=0)
