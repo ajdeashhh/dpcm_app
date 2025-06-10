@@ -19,14 +19,14 @@ uploaded_file = st.file_uploader("Upload the Audio File (.wav)", type=["wav"])
 # Sidebar with inputs and explanation
 st.sidebar.markdown("<h2 style='font-size: 20px; color: #4B8BBE;'>⚙️ DPCM Parameters</h2>", unsafe_allow_html=True)
 
-st.sidebar.write("🔢 **Quantizer Value (bits)**")
+st.sidebar.markdown("<div style='font-size:17px; margin: 0; padding: 0;'>🔢 <b>Quantizer Value (bits)</b></div>", unsafe_allow_html=True)
 quant_value = st.sidebar.number_input("", min_value=1, max_value=16, value=2)
 
-st.sidebar.write("🔁 **Prediction Order**")
+st.sidebar.markdown("<div style='font-size:17px; margin: 0; padding: 0;'>🔁 <b>Prediction Order</b></div>", unsafe_allow_html=True)
 prediction_order = st.sidebar.number_input("", min_value=1, max_value=10, value=1)
 
 # Explanations
-st.sidebar.markdown("## ℹ️ What These Parameters Mean:")
+st.sidebar.markdown("<div style='font-size:17px; margin: 0; padding: 0;'>ℹ️ <b>What These Parameters Mean:</b></div>", unsafe_allow_html=True)
 st.sidebar.markdown("""
 - **Quantizer Value (bits)**  
   Defines how many bits are used to represent the prediction error of each sample.
