@@ -91,26 +91,14 @@ if uploaded_file is not None:
     
     col1, col2 = st.columns(2)
     
-    if 'show_original' not in st.session_state:
-        st.session_state.show_original = False
-    if 'show_decoded' not in st.session_state:
-        st.session_state.show_decoded = False
-    
     with col1:
         if st.button("▶️ Play Original Audio"):
-            st.session_state.show_original = True
+            original_audio_buffer = BytesIO()
+            sf.write(original_audio_buffer, y, fs, format='WAV')
+            st.audio(original_audio_buffer.getvalue(), format='audio/wav')
     
     with col2:
         if st.button("▶️ Play Decoded Audio"):
-            st.session_state.show_decoded = True
-    
-    # Show audio player only after button click
-    if st.session_state.show_original:
-        original_audio_buffer = BytesIO()
-        sf.write(original_audio_buffer, y, fs, format='WAV')
-        st.audio(original_audio_buffer.getvalue(), format='audio/wav')
-    
-    if st.session_state.show_decoded:
-        decoded_audio_buffer = BytesIO()
-        sf.write(decoded_audio_buffer, reconstructed_signal, fs, format='WAV')
-        st.audio(decoded_audio_buffer.getvalue(), format='audio/wav')
+            decoded_audio_buffer = BytesIO()
+            sf.write(decoded_audio_buffer, reconstructed_signal, fs, format='WAV')
+            st.audio(decoded_audio_buffer.getvalue(), format='audio/wav')
