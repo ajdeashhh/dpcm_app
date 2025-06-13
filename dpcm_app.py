@@ -90,8 +90,6 @@ if uploaded_file is not None:
     mse = np.mean((y - reconstructed_signal)**2)
     snr = 10 * np.log10(np.sum(y**2) / np.sum((y - reconstructed_signal)**2))
     compression_ratio = (len_y * 16) / (len_y * quant_value)
-    mos = 1 + 0.035 * snr + snr * (snr - 60) * (100 - snr) * 7e-6
-    mos = np.clip(mos, 1, 5)
 
     # Metrics display
     st.markdown("### 📊 Performance Metrics")
@@ -99,14 +97,12 @@ if uploaded_file is not None:
     col1.metric("Mean Square Error", f"{mse:.8f}")
     col2.metric("Compression Ratio", f"{compression_ratio:.2f}")
     col3.metric("SNR (dB)", f"{snr:.2f}")
-    col4.metric("MOS (1-5)", f"{mos:.2f}")
 
     with st.expander("ℹ️ Definitions of Metrics", expanded=False):
         st.markdown("""
         - **Mean Square Error (MSE)**: Measures the average squared difference between the original and reconstructed signals. Lower is better.
         - **Compression Ratio (CR)**: Ratio of original bit size to compressed bit size. Higher = more compression.
         - **Signal-to-Noise Ratio (SNR)**: Ratio of signal power to noise power in dB. Higher = better quality.
-        - **MOS (Mean Opinion Score)**: Predicts perceived audio quality from 1 (bad) to 5 (excellent).
         """)
 
     # Plots
