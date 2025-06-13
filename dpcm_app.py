@@ -93,7 +93,7 @@ if uploaded_file is not None:
 
     # Metrics display
     st.markdown("### 📊 Performance Metrics")
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3 = st.columns(3)
     col1.metric("Mean Square Error", f"{mse:.8f}")
     col2.metric("Compression Ratio", f"{compression_ratio:.2f}")
     col3.metric("SNR (dB)", f"{snr:.2f}")
